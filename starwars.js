@@ -14,3 +14,27 @@ play({
     title: 'Intro',
     artist: 'John Williams'
 }, document.body);
+
+function converterDecimalParaRomano(numeral) {
+    const dados = {
+        '1': 'I',
+        '2': 'II',
+        '3': 'III',
+        '4': 'IV',
+        '5': 'V',
+        '6': 'VI',
+    };
+    return dados[numeral];
+}
+
+fetch(`${API_ENDPOINT}/films`)
+.then(response => response.json())
+.then(response => {
+    const filmes = response.results;
+    const listaFilmesEl = document.querySelector('#filmes ul');
+    filmes.forEach(filme => {
+        listaFilmesEl.innerHTML += `
+            <li>EPISODE ${converterDecimalParaRomano(filme.episode_id)} - ${filme.title.toUpperCase()}</li>
+        `;
+    });
+});
