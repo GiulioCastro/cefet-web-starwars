@@ -7,6 +7,7 @@
 const API_ENDPOINT = 'https://swapi.dev/api'
 
 import { play } from './music.js';
+import { restartAnimation } from './restart-animation.js';
 
 play({
     audioUrl: './audio/tema-sw.mp3',
@@ -32,9 +33,21 @@ fetch(`${API_ENDPOINT}/films`)
 .then(response => {
     const filmes = response.results;
     const listaFilmesEl = document.querySelector('#filmes ul');
-    filmes.forEach(filme => {
-        listaFilmesEl.innerHTML += `
-            <li>EPISODE ${converterDecimalParaRomano(filme.episode_id)} - ${filme.title.toUpperCase()}</li>
-        `;
+    filmes.forEach(filme => {        
+        const filmeEl = document.createElement('li');
+        filmeEl.innerHTML = `EPISODE ${converterDecimalParaRomano(filme.episode_id)} - ${filme.title.toUpperCase()}`;
+
+        filmeEl.addEventListener('click', (e) => {
+            const introducaoEl = document.querySelector('pre.introducao');
+            introducaoEl.innerHTML = `
+                Episode ${converterDecimalParaRomano(filme.episode_id)}
+                ${filme.title.toUpperCase()}   
+                         
+                ${filme.opening_crawl}
+            `;
+            restartAnimation(introducaoEl);
+        });
+        
+        listaFilmesEl.appendChild(filmeEl);
     });
 });
